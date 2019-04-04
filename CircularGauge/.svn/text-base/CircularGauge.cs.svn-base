@@ -1,0 +1,270 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Drawing.Design;
+using WControls.Utils;
+using WControls.Drawable;
+
+namespace WControls.Gauges
+{
+    /// <summary>
+    /// A circular gauge for pressure, speed, etc.
+    /// </summary>
+    [ToolboxItem(true)]
+    [Description("A circular gauge for pressure, speed, etc.")]
+    public partial class CircularGauge : BaseWControl
+    {
+        private double m_value;
+        /// <summary>
+        /// The value of the gauge
+        /// </summary>
+        [DefaultValue(0.0d)]
+        [Description("The value of the gauge")]
+        [Category("Appearance")]
+        public double Value
+        {
+            get { return m_value; }
+            set 
+            {
+                if ((value < Axis.MinValue) || (value > Axis.MaxValue))
+                {
+                    throw new ArgumentOutOfRangeException("value");
+                }
+                m_value = value;
+                HandleValueChanged();
+            }
+        }
+
+        /// <summary>
+        /// Whether or not to animate value changes
+        /// </summary>
+        [DefaultValue(true)]
+        [Description("Whether or not to animate value changes")]
+        [Category("Behavior")]
+        public bool Animate { get; set; }
+
+        /// <summary>
+        /// The total amount of time (ms) to get between two different values
+        /// </summary>
+        [DefaultValue(1000)]
+        [Description("The total amount of time (ms) to get between two different values")]
+        [Category("Behavior")]
+        public int AnimationLength { get; set; }
+
+        /// <summary>
+        /// What type of interpolation to do when animating the needle
+        /// </summary>
+        [DefaultValue(typeof(EaseFunctionType), "Linear")]
+        [Description("What type of interpolation to do when animating the needle")]
+        [Category("Behavior")]
+        public EaseFunctionType EaseFunction { get; set; }
+
+        /// <summary>
+        /// What mode of easing to use when animating the needle
+        /// </summary>
+        [DefaultValue(typeof(EaseMode), "InOut")]
+        [Description("What mode of easing to use when animating the needle")]
+        [Category("Behavior")]
+        public EaseMode EaseMode { get; set; }
+
+        /// <summary>
+        /// Controls the granularity of the animation, smaller values look better but are
+        /// more CPU-intensive
+        /// </summary>
+        [DefaultValue(100)]
+        [Description("The amount of time (ms) between animation frames")]
+        [Category("Behavior")]
+        public int AnimationInterval
+        {
+            get { return m_animationTimer.Interval; }
+            set { m_animationTimer.Interval = value; }
+        }
+
+        [Browsable(false)]
+        public override ControlShape Shape
+        {
+            get
+            {
+                return ControlShape.Circular;
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// The needle associated with this control
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        public Needle Needle
+        {
+            get { return m_needle; }
+        }
+
+        /// <summary>
+        /// The axis associated with this control
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        public CircularAxis Axis
+        {
+            get { return m_axis; }
+        }
+
+        private CircularAxis m_axis;
+        private Needle m_needle;
+
+        private EaseFunction m_easeFunction;
+        private DateTime m_animateStart;
+
+        public CircularGauge()
+            : base(false)
+        {
+            m_axis = new CircularAxis();
+            m_needle = new Needle();
+
+            m_axis.AppearanceChanged += new EventHandler(OnItemAppearanceChanged);
+            m_axis.LayoutChanged += new EventHandler(OnItemLayoutChanged);
+
+            m_needle.AppearanceChanged += new EventHandler(OnItemAppearanceChanged);
+            m_needle.LayoutChanged += new EventHandler(OnItemLayoutChanged);
+
+            m_needle.CalculatePaths(ClientRectangle);
+            m_axis.CalculatePaths(ClientRectangle);
+
+            InitializeComponent();
+
+            Value = 0;
+            Animate = true;
+            EaseFunction = EaseFunctionType.Linear;
+            AnimationLength = 1000;
+            AnimationInterval = 100;
+            EaseMode = EaseMode.InOut;
+        }
+
+        protected void HandleValueChanged()
+        {
+            StopAnimation();
+
+            if (m_axis != null && m_needle != null)
+            {
+                double percent = (m_value - Axis.MinValue) / (double)(Axis.MaxValue - Axis.MinValue);
+                double degrees = Axis.AxisStartDegrees - (percent * Axis.AxisLengthDegrees);
+
+                if (Animate && !DesignMode)
+                {
+                    StartAnimation(m_needle.Orientation, degrees);
+                }
+                else
+                {
+                    m_needle.Orientation = degrees;
+                }
+            }
+        }
+
+        private void StartAnimation(double dFrom, double dTo)
+        {
+            m_easeFunction = new EaseFunction(EaseFunction, EaseMode, AnimationLength, dFrom, dTo);
+            m_animateStart = DateTime.Now;
+            m_animationTimer.Start();
+        }
+
+        private void StopAnimation()
+        {
+            m_animationTimer.Stop();
+        }
+
+        private void m_animationTimer_Tick(object sender, EventArgs e)
+        {
+            TimeSpan span = DateTime.Now - m_animateStart;
+
+            if (span.TotalMilliseconds >= AnimationLength)
+            {
+                m_needle.Orientation = m_easeFunction.ToValue;
+                StopAnimation();
+            }
+            else
+            {
+                double dVal = m_easeFunction.GetValue(span.TotalMilliseconds);
+                m_needle.Orientation = dVal;
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            //paint axis and needle, then gloss
+            if (m_axis != null)
+            {
+                m_axis.Draw(e.Graphics);
+            }
+            if (m_needle != null)
+            {
+                m_needle.Draw(e.Graphics);
+            }
+
+            OnPaintGloss(e.Graphics);
+
+            base.OnPaint(e);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            if (m_axis != null)
+            {
+                m_axis.CalculatePaths(ClientRectangle);
+            }
+            if (m_needle != null)
+            {
+                m_needle.CalculatePaths(ClientRectangle);
+            }
+
+            base.OnResize(e);
+        }
+
+        private void OnItemAppearanceChanged(object sender, EventArgs e)
+        {
+            IDrawable drawable = sender as IDrawable;
+            if (drawable != null)
+            {
+                this.Invalidate(drawable);
+            }
+        }
+
+        private void OnItemLayoutChanged(object sender, EventArgs e)
+        {
+            IDrawable drawable = sender as IDrawable;
+            if (drawable != null)
+            {
+                drawable.CalculatePaths(ClientRectangle);
+                this.Invalidate(drawable);
+            }
+        }
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+
+                if (m_axis != null)
+                {
+                    m_axis.Dispose();
+                }
+
+                if (m_needle != null)
+                {
+                    m_needle.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
+    }
+}

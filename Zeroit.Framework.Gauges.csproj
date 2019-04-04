@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C6BDE2F-7F1E-4202-8F25-166F7ABE3770}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Zeroit.Framework.Gauges</RootNamespace>
+    <AssemblyName>Zeroit.Framework.Gauges</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\Zeroit.Framework.Gauges.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\Zeroit.Framework.Gauges.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>ZeroitStrongKeys.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnalogMeterControl\AnalogMeter\LBAnalogMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnalogMeterControl\AnalogMeter\MeterRenderer.cs" />
+    <Compile Include="AnalogMeterControl\Utils\ColorMng.cs" />
+    <Compile Include="AnalogMeterControl\Utils\MathFunc.cs" />
+    <Compile Include="BaseWControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BaseWControl.Designer.cs">
+      <DependentUpon>BaseWControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Clocks\AsanaClock\AsanaClock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ColorDialogs\AsanaColorDialog\AsanaColor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compass\AsanaCompass\AsanaCompass.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\Collection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\CompassRing\CompassRing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\GantryControl\Gantry.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\Marker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\MarkerSet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\Ring.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\RingCollection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\TextItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Compass\TextItemCollection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gauge\Acqua\SmartTag.cs" />
+    <Compile Include="Gauge\Acqua\AcquaGaugeImproved.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gauge\Anidaso\Gauge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gauge\Anidaso\Helper\cmd.cs" />
+    <Compile Include="Gauge\Anidaso\Helper\ColorTransition.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gauge\Anidaso\Helper\CustomControl.cs" />
+    <Compile Include="Gauge\Anidaso\Helper\UserControl.cs" />
+    <Compile Include="Gauge\Acqua\Gauge.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PlutoGauge.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drawable\CircularAxis.cs" />
+    <Compile Include="Drawable\DigitalBar.cs" />
+    <Compile Include="Drawable\IDrawable.cs" />
+    <Compile Include="Drawable\Needle.cs" />
+    <Compile Include="CircularGauge\CircularGauge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CircularGauge\CircularGauge.Designer.cs">
+      <DependentUpon>CircularGauge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Thermometer\AnkasaMeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TemOMeter\ShattaThermometer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Thermometer\ThermometerSlider.cs" />
+    <Compile Include="Utils\CustomExtensions.cs" />
+    <Compile Include="Utils\EaseFunction.cs" />
+    <Compile Include="Utils\GraphicsHelper.cs" />
+    <Compile Include="VuMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Reflection.jpg" />
+    <None Include="Zeroit.Framework.Gauges.nuspec" />
+    <None Include="ZeroitStrongKeys.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BaseWControl.resx">
+      <DependentUpon>BaseWControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CircularGauge\CircularGauge.resx">
+      <DependentUpon>CircularGauge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ThermometerIcon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MinuteHand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\speedometer.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
