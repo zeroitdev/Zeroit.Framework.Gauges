@@ -89,28 +89,13 @@ namespace Zeroit.Framework.Gauges.Anidaso.Helper
         /// <param name="firstTime">if set to <c>true</c> [first time].</param>
         public static void initializeComponent(bool firstTime)
         {
-            DialogResult dialogResult;
-            //if (firstTime)
-            //{
-            //    MessageBox.Show("Zeroit Control", "Zeroit License", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            //}
+            
+            
             if (CustomControl.Paint_())
             {
                 string str = CustomControl.RenderComplete();
-                do
-                {
-                    if (str.ToLower().Trim() == "true")
-                    {
-                        return;
-                    }
-                    dialogResult = MessageBox.Show(string.Concat(str, "\n \n Design Time License Locked (Your project wont be affected)"), "Bunifu UI License Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation);
-                }
-                while (dialogResult == DialogResult.Retry);
-                if (dialogResult == DialogResult.Abort)
-                {
-                    cmd.EXECUTECMD("taskkill /im devenv.exe /f");
-                }
-                if (dialogResult == DialogResult.Ignore & firstTime)
+                
+                if (firstTime)
                 {
                     System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer()
                     {
